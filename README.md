@@ -67,11 +67,26 @@ where:
 As the question at hand relied weekly data points, `Prophet`, was set to exclude daily  seasonality while staying alert when identifying year-to-year trends and shifts in those trends over time. This was achieved;  
 ```
 # use fbprophet to make Prophet model
-place_prophet = fbprophet.Prophet(changepoint_prior_scale=0.15,
-                                  daily_seasonality=False,
-                                  weekly_seasonality=False,
-                                  yearly_seasonality=True,
-                                  n_changepoints=10)
+master_model=Prophet(
+    growth='linear',
+    n_changepoints=4,
+    yearly_seasonality=False,
+    weekly_seasonality=False,
+    daily_seasonality=False,
+    seasonality_mode='additive',
+    ).add_seasonality(
+        name='monthly',
+        period=30.5,
+        fourier_order=5
+    ).add_seasonality(
+        name='yearly',
+        period=365.25,
+        fourier_order=20
+    ).add_seasonality(
+        name='quarterly',
+        period=365.25/4,
+        fourier_order=5,
+        prior_scale=15)
 ```
 ## Results  
 - The model preformed with an average 8.96% cross validated Mean Absolute Percentage Error
