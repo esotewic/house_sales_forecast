@@ -31,6 +31,7 @@ This project aims to utilize machine learning on real estate data to accurately 
     - E.g. LivingArea, Bedrooms, Bathrooms
   - Different PostalCodes labeled definitely exhibited some similarities.
   - Data in greater Los Angeles area does not share same qualities as other cities in America. I wanted to test the uniqueness of the housing infrastructure of the area.
+  - Refer to Housing Price Model for data cleaning
 
 #### 2. Defined Baseline using naive forecasting
   - Compared using the same timeframe from previous year
@@ -79,29 +80,3 @@ place_prophet = fbprophet.Prophet(changepoint_prior_scale=0.15,
     - Averaged 11.08% for Single Family Homes and 13.33% MAPE for Condos
     - When examining different cities (Santa Monica, Beverly Hills, Silverlake) MAPE's were drastically different
         - Averaged 27.78%, 15.72%, and 39.39% MAPE (respectively)
-
-### Samples
-#### Single Family Residence
-- Cross Validated MAPE = 2.6964%
-![Pleasanton, California Prophet Plot](https://github.com/gumdropsteve/population_prophet/blob/master/presentation/images/pleasanton_prophet.png)
-- 2000 actual: 63,654    
-- 2016
-    - actual: 77,046
-    - model: 79,398
-- 2017
-    - actual: 79,341
-    - model: 82,084
-- 2020 forecast: 87,920                    
-- 2040 forecast: 130,530
-#### Houston, Texas
-- Cross Validated MAPE = 1.5751%
-![Houston, Texas Prophet Plot](https://github.com/gumdropsteve/population_prophet/blob/master/presentation/images/houston_prophet.png)
-- 2000 actual: 1,953,631  
-- 2016
-    - actual: 2,240,582
-    - model: 2,314,358
-- 2017
-    - actual: 2,267,336
-    - model: 2,398,134
-- 2020 forecast: 2,394,410                  
-- 2040 forecast: 2,794,675
