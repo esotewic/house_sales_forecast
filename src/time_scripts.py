@@ -9,6 +9,8 @@ import seaborn as sns
 import datetime
 from epiweeks import Week
 from statsmodels.tools.eval_measures import rmse
+from statsmodels.tsa.seasonal import seasonal_decompose
+pd.plotting.register_matplotlib_converters()
 
 # Dividing data set for further analysis
 def forecasting_datasets_setup(master):
@@ -29,12 +31,28 @@ def forecasting_datasets_setup(master):
                      (master.PostalCode==90402)]
 
     # create dataset with only beverly hills zipcodes
-    bh_data = master[(master.PostalCode==90210)|
-                     (master.PostalCode==90212)]
+    bh_data = master[
+                     (master.PostalCode==90211)|
+                     (master.PostalCode==90067)|
+                     (master.PostalCode==90077)|
+                     (master.PostalCode==90064)|
+                     (master.PostalCode==90049)|
+                     (master.PostalCode==90272)|
+                     (master.PostalCode==90069)|
+                     (master.PostalCode==90046)|
+                     (master.PostalCode==90034)
+                     ]
 
     # create dataset with only silverlake zipcodes
     sl_data = master[(master.PostalCode==90039)|
-                     (master.PostalCode==90026)]
+                     (master.PostalCode==90026)|
+                     (master.PostalCode==90068)|
+                     (master.PostalCode==90028)|
+                  (master.PostalCode==90038)|
+                  (master.PostalCode==90069)|
+                     (master.PostalCode==90230)
+                     ]
+
     return master, sfr_master, condo_master, town_master, sm_data, bh_data, sl_data
 
 # split into daily counts
@@ -121,30 +139,31 @@ def prophet_analysis(df,split,freq,changepoints=3):
     ax1 = sns.lineplot(x='ds',y='y',data=train,label='Train True',legend='full',linestyle='-.')
     ax1 = sns.lineplot(x='ds',y='y',data=test,label='Test True',legend='full')
 
-    ax =m_eval.plot(eval_forecast)
-    ax = add_changepoints_to_plot(fig.gca(),m_eval,eval_forecast)
+    # ax =m_eval.plot(eval_forecast)
+    # ax = add_changepoints_to_plot(fig.gca(),m_eval,eval_forecast)
 
+    naive = df[117:143]
     predictions = eval_forecast.iloc[-test.shape[0]:]['yhat'] #grab predictions to compare with test set
     print('MAPE = ' + str((abs(np.array(test.y)-predictions)/(np.array(test.y))).mean()))
     print('RMSE = ' + str(rmse(predictions,test['y'])))
-    print('MEAN = ' + str(df.y.mean()))
-    return
+    print('MEAN = ' + str(df['y'].mean()))
+    print('BASELINE MAPE = ' + str((abs(np.array(test.y)-naive.y)/(np.array(test.y))).mean()))
+    print('BASELINE RMSE = ' + str(rmse(predictions,naive['y'])))
 
 
-def prophet_analysis_type(df,split,freq,changepoints=3):
+
+def prophet_analysis_type(df,split,freq):
+    df['y'] = df['y'].apply(lambda x: np.log(x))
     train = df.iloc[:split]
     test = df.iloc[split:]
     # m_eval = Prophet(growth='linear')
     m_eval = Prophet(
         growth='linear',
-        n_changepoints=changepoints,
-        changepoint_range=0.8,
         yearly_seasonality=False,
         weekly_seasonality=False,
         daily_seasonality=False,
         seasonality_mode='additive',
         seasonality_prior_scale=20,
-        changepoint_prior_scale=.5,
         mcmc_samples=0,
         interval_width=0.8,
         uncertainty_samples=500,
@@ -170,14 +189,17 @@ def prophet_analysis_type(df,split,freq,changepoints=3):
     ax1 = sns.lineplot(x='ds',y='y',data=train,label='Train True',legend='full',linestyle='-.')
     ax1 = sns.lineplot(x='ds',y='y',data=test,label='Test True',legend='full')
 
-    ax =m_eval.plot(eval_forecast)
-    ax = add_changepoints_to_plot(fig.gca(),m_eval,eval_forecast)
+    # ax =m_eval.plot(eval_forecast)
+    # ax = add_changepoints_to_plot(fig.gca(),m_eval,eval_forecast)
 
     predictions = eval_forecast.iloc[-test.shape[0]:]['yhat'] #grab predictions to compare with test set
     print('MAPE = ' + str((abs(np.array(test.y)-predictions)/(np.array(test.y))).mean()))
     print('RMSE = ' + str(rmse(predictions,test['y'])))
     print('MEAN = ' + str(df.y.mean()))
-    return
+    naive = df[115:141]
+    print('BASELINE MAPE = ' + str((abs(np.array(test.y)-naive.y)/(np.array(test.y))).mean()))
+    print('BASELINE RMSE = ' + str(rmse(predictions,naive['y'])))
+
 
 
 
@@ -186,32 +208,32 @@ def train_test_split_weekly_analysis(df,split,freq):
     train = df.iloc[:split]
     test = df.iloc[split:]
     # m_eval = Prophet(growth='linear')
-    m_eval = Prophet(
-        growth='linear',
-        n_changepoints=3,
-        changepoint_range=0.8,
-        yearly_seasonality=False,
-        weekly_seasonality=False,
-        daily_seasonality=False,
-        seasonality_mode='additive',
-        seasonality_prior_scale=20,
-        changepoint_prior_scale=.5,
-        mcmc_samples=0,
-        interval_width=0.8,
-        uncertainty_samples=500,
-        ).add_seasonality(
-            name='monthly',
-            period=30.5,
-            fourier_order=5
-        ).add_seasonality(
-            name='yearly',
-            period=365.25,
-            fourier_order=20
-        ).add_seasonality(
-            name='quarterly',
-            period=365.25/4,
-            fourier_order=5,
-            prior_scale=15)
+    m_eval = Prophet()
+        # growth='linear',
+        # n_changepoints=3,
+        # changepoint_range=0.8,
+        # yearly_seasonality=False,
+        # weekly_seasonality=False,
+        # daily_seasonality=False,
+        # seasonality_mode='additive',
+        # seasonality_prior_scale=20,
+        # changepoint_prior_scale=.5,
+        # mcmc_samples=0,
+        # interval_width=0.8,
+        # uncertainty_samples=500,
+        # ).add_seasonality(
+        #     name='monthly',
+        #     period=30.5,
+        #     fourier_order=5
+        # ).add_seasonality(
+        #     name='yearly',
+        #     period=365.25,
+        #     fourier_order=20
+        # ).add_seasonality(
+        #     name='quarterly',
+        #     period=365.25/4,
+        #     fourier_order=5,
+        #     prior_scale=15)
     m_eval.fit(train)
     eval_future=m_eval.make_future_dataframe(periods=test.shape[0],freq=freq)
     eval_forecast=m_eval.predict(eval_future)
@@ -228,16 +250,19 @@ def train_test_split_weekly_analysis(df,split,freq):
     print('MAPE = ' + str((abs(np.array(test.y)-predictions)/(np.array(test.y))).mean()))
     print('RMSE = ' + str(rmse(predictions,test['y'])))
     print('MEAN = ' + str(df.y.mean()))
+    naive = df[117:143]
+    print('BASELINE MAPE = ' + str((abs(np.array(test.y)-naive.y)/(np.array(test.y))).mean()))
+    print('BASELINE RMSE = ' + str(rmse(predictions,naive['y'])))
     return
 
 #     fig =m_eval.plot(eval_forecast)
 #     a = add_changepoints_to_plot(fig.gca(),m_eval,eval_forecast)
 
-    predictions = eval_forecast.iloc[-test.shape[0]:]['yhat'] #grab predictions to compare with test set
-    print('MAPE = ' + str((abs(np.array(test.y)-predictions)/(np.array(test.y))).mean()))
-    print('RMSE = ' + str(rmse(predictions,test['y'])))
-    print('MEAN = ' + str(df.y.mean()))
-    return
+    # predictions = eval_forecast.iloc[-test.shape[0]:]['yhat'] #grab predictions to compare with test set
+    # print('MAPE = ' + str((abs(np.array(test.y)-predictions)/(np.array(test.y))).mean()))
+    # print('RMSE = ' + str(rmse(predictions,test['y'])))
+    # print('MEAN = ' + str(df.y.mean()))
+    # return
 
 
 # used to compare forecasts of different features on same axis
@@ -332,21 +357,32 @@ def plot_compare(df1,df2,df3,freq):
     third_future = third_model.make_future_dataframe(periods=52,freq='W')
     third_forecast = third_model.predict(third_future)
 
-#     sfr_eval = Prophet(growth='linear')
-#     sfr_eval.fit(df)
-#     sfr_eval_future=sfr_eval.make_future_dataframe(periods=52,freq=freq)
-#     sfr_eval_forecast=sfr_eval.predict(sfr_eval_future)
-
     fig,axs=plt.subplots(1,1,figsize=(15,4))
-    ax1 = sns.lineplot(x='ds',y='yhat',data=master_forecast,label='Santa Monica Projected Sales',legend='full')
-    ax1 = sns.lineplot(x='ds',y='yhat',data=sfr_forecast,label='Beverly Hills Projected Sales',legend='full')
-    ax1 = sns.lineplot(x='ds',y='yhat',data=third_forecast,label='Silver Lake Projected Sales',legend='full')
-#     ax1.set_xlim([pd.Timestamp('2019-09-01'),pd.Timestamp('2019-09-30')])
+    ax1 = sns.lineplot(x='ds',y='yhat',data=master_forecast,label='Santa Monica Projected',legend='full')
+    ax1 = sns.lineplot(x='ds',y='yhat',data=sfr_forecast,label='Mid-Wilshire Projected',legend='full')
+    ax1 = sns.lineplot(x='ds',y='yhat',data=third_forecast,label='Silver Lake Projected',legend='full')
+
+def give_forecast(df1,df2,df3,freq):
+    master_model=Prophet()
+    master_model.fit(df1)
+    master_future = master_model.make_future_dataframe(periods=52,freq='W')
+    master_forecast = master_model.predict(master_future)
+
+    sfr_model=Prophet()
+    sfr_model.fit(df2)
+    sfr_future = sfr_model.make_future_dataframe(periods=52,freq='W')
+    sfr_forecast = sfr_model.predict(sfr_future)
+
+    third_model=Prophet()
+    third_model.fit(df3)
+    third_future = third_model.make_future_dataframe(periods=52,freq='W')
+    third_forecast = third_model.predict(third_future)
+    return master_forecast, sfr_forecast, third_forecast
 
 
 # prep data for evaluation metrics
 def prophet_cv_analysis(df,freq,changepoints=3):
-
+    df['y'] = df['y'].apply(lambda x: np.log(x))
     # m_eval = Prophet(growth='linear')
     m_eval = Prophet(
         growth='linear',
@@ -444,3 +480,13 @@ def time_series_mean_data():
     ts = ts.reset_index()
     ts.rename(columns={'CloseDate':'ds','ClosePrice':'y'},inplace=True)
     return ts
+
+def plot_decompose(df):
+    df = df.set_index('ds')
+    result = seasonal_decompose(df['y'],model='additive')
+    result.plot()
+
+def plot_future_decompose(df):
+    df = df.set_index('ds')
+    result = seasonal_decompose(df['yhat'],freq=12,model='additive')
+    result.plot()

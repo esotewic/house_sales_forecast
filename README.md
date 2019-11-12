@@ -1,4 +1,4 @@
-# Forecasting House Sales & Price using Facebook Prophet
+# Forecasting House Sales
 - This is a continuation of analysis on my previous machine learning project to predict home prices using data from the MLS (multiple listing services)
 - [Home Price Prediction](https://github.com/esotewic/ultimate_housing_model)
 ## Premise
@@ -92,6 +92,6 @@ master_model=Prophet(
 - The model preformed with an average 8.96% cross validated Mean Absolute Percentage Error
     - Calculated by comparing the final six months of the training's actual values with the Model's predictions for that year
 - Predictions on different property types and cities within Los Angeles area returned different results because of target sizes
-    - Averaged 11.08% for Single Family Homes and 13.33% MAPE for Condos
+    - Averaged 10.04% for Single Family Homes and 15.56% MAPE for Condos
     - When examining different cities (Santa Monica, Beverly Hills, Silverlake) MAPE's were drastically different
         - Averaged 27.78%, 15.72%, and 39.39% MAPE (respectively)
