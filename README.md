@@ -1,8 +1,19 @@
-# Forecasting House Sales
-- This is a continuation of analysis on my previous machine learning project to predict home prices using data from the MLS (multiple listing services)
-- [Home Price Prediction](https://github.com/esotewic/ultimate_housing_model)
+# Forecasting Real Estate Market with Time Series Modeling
+
+## Data
+The dataset was pulled from the MLS (Multiple Listing Services). There are about 26,000 transactions that span from Jan 2016 to Sept 2019. In a timeframe of slightly less than 4 years, there has been $40~ bn in total transactions.
+
 ## Premise
-This project aims to utilize machine learning on real estate data to accurately predict the future weekly home sale count and weekly average sale price in West Los Angeles Areas.
+This project aims to utilize machine learning on real estate data to accurately predict the future weekly home sale count and weekly average sale price in West Los Angeles Areas. The housing market in greater LA and its make-up of unique neighborhoods has always been a topic of great discussion among brokers and lenders. The potential applications of predicting future outcomes will allow us to identify potential investment opportunities. My goal is to create forecast model to predict prices & demand in each of these unique markets. Real estate firms or lenders could potentially use this information to fill voids in the market.
+
+## Overview
+Goal:
+Determine if a certain neighborhood is a good place to invest based on the forecasted median sale price and volume of sales (demand).
+Result:
+All three neighborhoods have potential investment value because of upward trend of sale prices. Only one neighborhood (Mid-Wilshire) exhibited upward trend in demand volume.
+
+<img src="https://github.com/esotewic/house_sales_forecast/blob/master/pictures/condo_volume.png">
+
 ## Applications
 - Investors looking for Real Estate opportunities
 - Real estate brokerage firms can use this to pick out potential new farm targets. Zillow has a similar feature but does is limited to their drop down selections. I would like to take it one step further and be able to grab specific property types in specific neighborhoods.
