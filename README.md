@@ -4,11 +4,10 @@
 ## Premise
 This project aims to utilize machine learning on real estate data to accurately predict the future weekly home sale count and weekly average sale price in West Los Angeles Areas.
 ## Applications
-- Real estate brokerage firms can use this to pick out potential new farm targets
+- Investors looking for Real Estate opportunities
+- Real estate brokerage firms can use this to pick out potential new farm targets. Zillow has a similar feature but does is limited to their drop down selections. I would like to take it one step further and be able to grab specific property types in specific neighborhoods.
 - Mortgage banks can use data for potential new purchase applications or refinances
-### Presentation
-- [One Pager]
-- [Resume]
+
 ### Dependencies
 - Python 3.7.2  
 - fbprophet 0.4.post2
