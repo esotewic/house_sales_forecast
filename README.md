@@ -12,7 +12,7 @@ Determine if a certain neighborhood is a good place to invest based on the forec
 Result:
 All three neighborhoods have potential investment value because of upward trend of sale prices. Only one neighborhood (Mid-Wilshire) exhibited upward trend in demand volume.
 
-<img src="https://github.com/esotewic/house_sales_forecast/blob/master/pictures/condo_volume.png">
+<img src="https://github.com/esotewic/house_sales_forecast/blob/master/pictures/LA_volume.png">
 
 ## Applications
 - Investors looking for Real Estate opportunities
