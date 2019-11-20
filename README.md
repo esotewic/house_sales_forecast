@@ -37,6 +37,7 @@ Model Price MAPE’s: 1.9%/0.6%/0.9%
 Baseline Price MAPE’s: 2.1%/1.0%/1.1%
 Model Demand MAPE’s: 2.6%/5.3%/5.1%
 Baseline Demand MAPE’s: 4.7%/7.7%/6.7%
+<img src="https://github.com/esotewic/house_sales_forecast/blob/master/pictures/sm_volume.png">
 
 ## Process
 #### 1. Exploratory Data Analysis
@@ -103,3 +104,5 @@ master_model=Prophet(
 ```
 ## Conclusion
 Silverlake, Mid-Wilshire, and Santa Monica all have an upward trend in forecast regarding sale prices. However, Mid-Wilshire is the only neighborhood exhibiting an increasing trend in sales volume in prior and forecasted. As a lender or brokerage this could still be a viable opportunity for increased profitability in commision or margins but as a agent farming I would be hesitant to enter other markets.
+
+<img src="https://github.com/esotewic/house_sales_forecast/blob/master/pictures/midwilshire_forecasted_trend.png">
