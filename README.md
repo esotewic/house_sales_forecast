@@ -1,4 +1,4 @@
-# Forecasting Real Estate Market with Time Series Modeling
+# Forecasting Real Estate Markets with Time Series Modeling
 
 ## Data
 The dataset was pulled from the MLS (Multiple Listing Services). There are about 26,000 transactions that span from Jan 2016 to Sept 2019. In a timeframe of slightly less than 4 years, there has been $40~ bn in total transactions.
